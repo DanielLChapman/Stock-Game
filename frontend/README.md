@@ -1,3 +1,1 @@
-# Advanced-React
-
-frontend
+Testing GraphQL, Apollo, Next with React
