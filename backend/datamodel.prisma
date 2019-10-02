@@ -1,0 +1,9 @@
+type Stock {
+  id: ID! @id
+  name: String!
+  symbol: String!
+  opening: Float
+  current: Float
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
