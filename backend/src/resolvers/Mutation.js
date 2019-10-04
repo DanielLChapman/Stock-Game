@@ -1,3 +1,18 @@
-const mutations = {};
+const Mutations = {
+   async createStock(parent, args, ctx, info) {
+        //TODO Check if admin
+        
+        const stock = await ctx.db.mutation.createStock({
+            data: {
+                ...args
+            }
+        }, info);
 
-module.exports = mutations;
+        console.log(stock);
+
+        return stock;
+
+    }
+};
+
+module.exports = Mutations;

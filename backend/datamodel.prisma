@@ -1,9 +1,15 @@
 type Stock {
   id: ID! @id
-  name: String!
-  symbol: String!
+  name: String! @unique
+  symbol: String! @unique
   opening: Float
   current: Float
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+
+type User {
+  id: ID! @id
+  name: String!
+  email: String!
 }

@@ -1,0 +1,9 @@
+# import * from './generated/prisma.graphql'
+
+type Mutation {
+    createStock(name: String, symbol: String, opening: Float, current: Float): Stock!
+}
+
+type Query {
+    stocks: [Stock]!
+}
