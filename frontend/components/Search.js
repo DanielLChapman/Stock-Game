@@ -1,6 +1,7 @@
 import SearchStyles from './styles/SearchStyles';
 import SearchBox from './SearchBox';
 import React, { Component } from 'react';
+import { stocks, stockIsTracked } from '../lib/stocks';
 
 class Search extends Component {
     constructor(props) {
@@ -15,6 +16,11 @@ class Search extends Component {
     };
 
     getStockName =  async (name) => {
+        if (!stockIsTracked(name)) {
+            return this.setState({
+                stockName: 'Error'
+            });
+        }
 
         //Will be a resolver from database, this is temporary for layouting
         /*
