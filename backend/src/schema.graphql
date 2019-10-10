@@ -2,8 +2,10 @@
 
 type Mutation {
     createStock(name: String, symbol: String, opening: Float, current: Float): Stock!
+    createRandomProfile(name: String): RandomProfile!
 }
 
 type Query {
     stocks: [Stock]!
+    randomProfiles: [RandomProfile]!
 }

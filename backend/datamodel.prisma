@@ -12,4 +12,13 @@ type User {
   id: ID! @id
   name: String!
   email: String!
+  money: Float @default(value: 10000000)
+  stock: [Stock]
+}
+
+type RandomProfile {
+  id: ID! @id
+  name: String!
+  money: Float @default(value: 10000000)
+  stock: [Stock]
 }

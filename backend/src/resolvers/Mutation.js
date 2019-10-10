@@ -12,6 +12,20 @@ const Mutations = {
 
         return stock;
 
+    },
+    async createRandomProfile(parent, args, ctx, info) {
+        //TODO Check if admin
+        
+        const randomProfile = await ctx.db.mutation.createRandomProfile({
+            data: {
+                ...args
+            }
+        }, info);
+
+        console.log(randomProfile);
+
+        return randomProfile;
+
     }
 };
 

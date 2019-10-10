@@ -1,5 +1,9 @@
 # source: https://us1.prisma.sh/daniel-chapman-a5ce0d/stock-game/dev
-# timestamp: Thu Oct 03 2019 17:47:18 GMT-0400 (Eastern Daylight Time)
+# timestamp: Thu Oct 10 2019 16:09:05 GMT-0400 (Eastern Daylight Time)
+
+type AggregateRandomProfile {
+  count: Int!
+}
 
 type AggregateStock {
   count: Int!
@@ -23,18 +27,24 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createStock(data: StockCreateInput!): Stock!
   createUser(data: UserCreateInput!): User!
-  updateStock(data: StockUpdateInput!, where: StockWhereUniqueInput!): Stock
+  createRandomProfile(data: RandomProfileCreateInput!): RandomProfile!
+  createStock(data: StockCreateInput!): Stock!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteStock(where: StockWhereUniqueInput!): Stock
+  updateRandomProfile(data: RandomProfileUpdateInput!, where: RandomProfileWhereUniqueInput!): RandomProfile
+  updateStock(data: StockUpdateInput!, where: StockWhereUniqueInput!): Stock
   deleteUser(where: UserWhereUniqueInput!): User
-  upsertStock(where: StockWhereUniqueInput!, create: StockCreateInput!, update: StockUpdateInput!): Stock!
+  deleteRandomProfile(where: RandomProfileWhereUniqueInput!): RandomProfile
+  deleteStock(where: StockWhereUniqueInput!): Stock
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyStocks(data: StockUpdateManyMutationInput!, where: StockWhereInput): BatchPayload!
+  upsertRandomProfile(where: RandomProfileWhereUniqueInput!, create: RandomProfileCreateInput!, update: RandomProfileUpdateInput!): RandomProfile!
+  upsertStock(where: StockWhereUniqueInput!, create: StockCreateInput!, update: StockUpdateInput!): Stock!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  deleteManyStocks(where: StockWhereInput): BatchPayload!
+  updateManyRandomProfiles(data: RandomProfileUpdateManyMutationInput!, where: RandomProfileWhereInput): BatchPayload!
+  updateManyStocks(data: StockUpdateManyMutationInput!, where: StockWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyRandomProfiles(where: RandomProfileWhereInput): BatchPayload!
+  deleteManyStocks(where: StockWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -65,18 +75,239 @@ type PageInfo {
 }
 
 type Query {
-  stocks(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  stock(where: StockWhereUniqueInput!): Stock
+  randomProfiles(where: RandomProfileWhereInput, orderBy: RandomProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RandomProfile]!
+  stocks(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock]!
   user(where: UserWhereUniqueInput!): User
-  stocksConnection(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockConnection!
+  randomProfile(where: RandomProfileWhereUniqueInput!): RandomProfile
+  stock(where: StockWhereUniqueInput!): Stock
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  randomProfilesConnection(where: RandomProfileWhereInput, orderBy: RandomProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RandomProfileConnection!
+  stocksConnection(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockConnection!
 
   """Fetches an object given its ID"""
   node(
     """The ID of an object"""
     id: ID!
   ): Node
+}
+
+type RandomProfile implements Node {
+  id: ID!
+  name: String!
+  money: Float
+  stock(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock!]
+}
+
+"""A connection to a list of items."""
+type RandomProfileConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [RandomProfileEdge]!
+  aggregate: AggregateRandomProfile!
+}
+
+input RandomProfileCreateInput {
+  id: ID
+  name: String!
+  money: Float
+  stock: StockCreateManyInput
+}
+
+"""An edge in a connection."""
+type RandomProfileEdge {
+  """The item at the end of the edge."""
+  node: RandomProfile!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum RandomProfileOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  money_ASC
+  money_DESC
+}
+
+type RandomProfilePreviousValues {
+  id: ID!
+  name: String!
+  money: Float
+}
+
+type RandomProfileSubscriptionPayload {
+  mutation: MutationType!
+  node: RandomProfile
+  updatedFields: [String!]
+  previousValues: RandomProfilePreviousValues
+}
+
+input RandomProfileSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RandomProfileSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RandomProfileSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RandomProfileSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: RandomProfileWhereInput
+}
+
+input RandomProfileUpdateInput {
+  name: String
+  money: Float
+  stock: StockUpdateManyInput
+}
+
+input RandomProfileUpdateManyMutationInput {
+  name: String
+  money: Float
+}
+
+input RandomProfileWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RandomProfileWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RandomProfileWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RandomProfileWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  money: Float
+
+  """All values that are not equal to given value."""
+  money_not: Float
+
+  """All values that are contained in given list."""
+  money_in: [Float!]
+
+  """All values that are not contained in given list."""
+  money_not_in: [Float!]
+
+  """All values less than the given value."""
+  money_lt: Float
+
+  """All values less than or equal the given value."""
+  money_lte: Float
+
+  """All values greater than the given value."""
+  money_gt: Float
+
+  """All values greater than or equal the given value."""
+  money_gte: Float
+  stock_every: StockWhereInput
+  stock_some: StockWhereInput
+  stock_none: StockWhereInput
+}
+
+input RandomProfileWhereUniqueInput {
+  id: ID
 }
 
 type Stock implements Node {
@@ -105,6 +336,11 @@ input StockCreateInput {
   symbol: String!
   opening: Float
   current: Float
+}
+
+input StockCreateManyInput {
+  create: [StockCreateInput!]
+  connect: [StockWhereUniqueInput!]
 }
 
 """An edge in a connection."""
@@ -141,6 +377,225 @@ type StockPreviousValues {
   current: Float
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input StockScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [StockScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [StockScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [StockScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  symbol: String
+
+  """All values that are not equal to given value."""
+  symbol_not: String
+
+  """All values that are contained in given list."""
+  symbol_in: [String!]
+
+  """All values that are not contained in given list."""
+  symbol_not_in: [String!]
+
+  """All values less than the given value."""
+  symbol_lt: String
+
+  """All values less than or equal the given value."""
+  symbol_lte: String
+
+  """All values greater than the given value."""
+  symbol_gt: String
+
+  """All values greater than or equal the given value."""
+  symbol_gte: String
+
+  """All values containing the given string."""
+  symbol_contains: String
+
+  """All values not containing the given string."""
+  symbol_not_contains: String
+
+  """All values starting with the given string."""
+  symbol_starts_with: String
+
+  """All values not starting with the given string."""
+  symbol_not_starts_with: String
+
+  """All values ending with the given string."""
+  symbol_ends_with: String
+
+  """All values not ending with the given string."""
+  symbol_not_ends_with: String
+  opening: Float
+
+  """All values that are not equal to given value."""
+  opening_not: Float
+
+  """All values that are contained in given list."""
+  opening_in: [Float!]
+
+  """All values that are not contained in given list."""
+  opening_not_in: [Float!]
+
+  """All values less than the given value."""
+  opening_lt: Float
+
+  """All values less than or equal the given value."""
+  opening_lte: Float
+
+  """All values greater than the given value."""
+  opening_gt: Float
+
+  """All values greater than or equal the given value."""
+  opening_gte: Float
+  current: Float
+
+  """All values that are not equal to given value."""
+  current_not: Float
+
+  """All values that are contained in given list."""
+  current_in: [Float!]
+
+  """All values that are not contained in given list."""
+  current_not_in: [Float!]
+
+  """All values less than the given value."""
+  current_lt: Float
+
+  """All values less than or equal the given value."""
+  current_lte: Float
+
+  """All values greater than the given value."""
+  current_gt: Float
+
+  """All values greater than or equal the given value."""
+  current_gte: Float
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 type StockSubscriptionPayload {
@@ -182,6 +637,13 @@ input StockSubscriptionWhereInput {
   node: StockWhereInput
 }
 
+input StockUpdateDataInput {
+  name: String
+  symbol: String
+  opening: Float
+  current: Float
+}
+
 input StockUpdateInput {
   name: String
   symbol: String
@@ -189,11 +651,46 @@ input StockUpdateInput {
   current: Float
 }
 
+input StockUpdateManyDataInput {
+  name: String
+  symbol: String
+  opening: Float
+  current: Float
+}
+
+input StockUpdateManyInput {
+  create: [StockCreateInput!]
+  connect: [StockWhereUniqueInput!]
+  set: [StockWhereUniqueInput!]
+  disconnect: [StockWhereUniqueInput!]
+  delete: [StockWhereUniqueInput!]
+  update: [StockUpdateWithWhereUniqueNestedInput!]
+  updateMany: [StockUpdateManyWithWhereNestedInput!]
+  deleteMany: [StockScalarWhereInput!]
+  upsert: [StockUpsertWithWhereUniqueNestedInput!]
+}
+
 input StockUpdateManyMutationInput {
   name: String
   symbol: String
   opening: Float
   current: Float
+}
+
+input StockUpdateManyWithWhereNestedInput {
+  where: StockScalarWhereInput!
+  data: StockUpdateManyDataInput!
+}
+
+input StockUpdateWithWhereUniqueNestedInput {
+  where: StockWhereUniqueInput!
+  data: StockUpdateDataInput!
+}
+
+input StockUpsertWithWhereUniqueNestedInput {
+  where: StockWhereUniqueInput!
+  update: StockUpdateDataInput!
+  create: StockCreateInput!
 }
 
 input StockWhereInput {
@@ -422,14 +919,17 @@ input StockWhereUniqueInput {
 }
 
 type Subscription {
-  stock(where: StockSubscriptionWhereInput): StockSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  randomProfile(where: RandomProfileSubscriptionWhereInput): RandomProfileSubscriptionPayload
+  stock(where: StockSubscriptionWhereInput): StockSubscriptionPayload
 }
 
 type User implements Node {
   id: ID!
   name: String!
   email: String!
+  money: Float
+  stock(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock!]
 }
 
 """A connection to a list of items."""
@@ -446,6 +946,8 @@ input UserCreateInput {
   id: ID
   name: String!
   email: String!
+  money: Float
+  stock: StockCreateManyInput
 }
 
 """An edge in a connection."""
@@ -464,12 +966,15 @@ enum UserOrderByInput {
   name_DESC
   email_ASC
   email_DESC
+  money_ASC
+  money_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   name: String!
   email: String!
+  money: Float
 }
 
 type UserSubscriptionPayload {
@@ -514,11 +1019,14 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   name: String
   email: String
+  money: Float
+  stock: StockUpdateManyInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
   email: String
+  money: Float
 }
 
 input UserWhereInput {
@@ -650,6 +1158,31 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
+  money: Float
+
+  """All values that are not equal to given value."""
+  money_not: Float
+
+  """All values that are contained in given list."""
+  money_in: [Float!]
+
+  """All values that are not contained in given list."""
+  money_not_in: [Float!]
+
+  """All values less than the given value."""
+  money_lt: Float
+
+  """All values less than or equal the given value."""
+  money_lte: Float
+
+  """All values greater than the given value."""
+  money_gt: Float
+
+  """All values greater than or equal the given value."""
+  money_gte: Float
+  stock_every: StockWhereInput
+  stock_some: StockWhereInput
+  stock_none: StockWhereInput
 }
 
 input UserWhereUniqueInput {
