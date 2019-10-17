@@ -1,11 +1,19 @@
 # source: https://us1.prisma.sh/daniel-chapman-a5ce0d/stock-game/dev
-# timestamp: Thu Oct 10 2019 16:09:05 GMT-0400 (Eastern Daylight Time)
+# timestamp: Thu Oct 17 2019 15:40:20 GMT-0400 (Eastern Daylight Time)
 
 type AggregateRandomProfile {
   count: Int!
 }
 
+type AggregateRandomProfileStockOrder {
+  count: Int!
+}
+
 type AggregateStock {
+  count: Int!
+}
+
+type AggregateStockOrder {
   count: Int!
 }
 
@@ -29,21 +37,33 @@ scalar Long
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createRandomProfile(data: RandomProfileCreateInput!): RandomProfile!
+  createStockOrder(data: StockOrderCreateInput!): StockOrder!
+  createRandomProfileStockOrder(data: RandomProfileStockOrderCreateInput!): RandomProfileStockOrder!
   createStock(data: StockCreateInput!): Stock!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateRandomProfile(data: RandomProfileUpdateInput!, where: RandomProfileWhereUniqueInput!): RandomProfile
+  updateStockOrder(data: StockOrderUpdateInput!, where: StockOrderWhereUniqueInput!): StockOrder
+  updateRandomProfileStockOrder(data: RandomProfileStockOrderUpdateInput!, where: RandomProfileStockOrderWhereUniqueInput!): RandomProfileStockOrder
   updateStock(data: StockUpdateInput!, where: StockWhereUniqueInput!): Stock
   deleteUser(where: UserWhereUniqueInput!): User
   deleteRandomProfile(where: RandomProfileWhereUniqueInput!): RandomProfile
+  deleteStockOrder(where: StockOrderWhereUniqueInput!): StockOrder
+  deleteRandomProfileStockOrder(where: RandomProfileStockOrderWhereUniqueInput!): RandomProfileStockOrder
   deleteStock(where: StockWhereUniqueInput!): Stock
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertRandomProfile(where: RandomProfileWhereUniqueInput!, create: RandomProfileCreateInput!, update: RandomProfileUpdateInput!): RandomProfile!
+  upsertStockOrder(where: StockOrderWhereUniqueInput!, create: StockOrderCreateInput!, update: StockOrderUpdateInput!): StockOrder!
+  upsertRandomProfileStockOrder(where: RandomProfileStockOrderWhereUniqueInput!, create: RandomProfileStockOrderCreateInput!, update: RandomProfileStockOrderUpdateInput!): RandomProfileStockOrder!
   upsertStock(where: StockWhereUniqueInput!, create: StockCreateInput!, update: StockUpdateInput!): Stock!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyRandomProfiles(data: RandomProfileUpdateManyMutationInput!, where: RandomProfileWhereInput): BatchPayload!
+  updateManyStockOrders(data: StockOrderUpdateManyMutationInput!, where: StockOrderWhereInput): BatchPayload!
+  updateManyRandomProfileStockOrders(data: RandomProfileStockOrderUpdateManyMutationInput!, where: RandomProfileStockOrderWhereInput): BatchPayload!
   updateManyStocks(data: StockUpdateManyMutationInput!, where: StockWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyRandomProfiles(where: RandomProfileWhereInput): BatchPayload!
+  deleteManyStockOrders(where: StockOrderWhereInput): BatchPayload!
+  deleteManyRandomProfileStockOrders(where: RandomProfileStockOrderWhereInput): BatchPayload!
   deleteManyStocks(where: StockWhereInput): BatchPayload!
 }
 
@@ -77,12 +97,18 @@ type PageInfo {
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   randomProfiles(where: RandomProfileWhereInput, orderBy: RandomProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RandomProfile]!
+  stockOrders(where: StockOrderWhereInput, orderBy: StockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockOrder]!
+  randomProfileStockOrders(where: RandomProfileStockOrderWhereInput, orderBy: RandomProfileStockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RandomProfileStockOrder]!
   stocks(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock]!
   user(where: UserWhereUniqueInput!): User
   randomProfile(where: RandomProfileWhereUniqueInput!): RandomProfile
+  stockOrder(where: StockOrderWhereUniqueInput!): StockOrder
+  randomProfileStockOrder(where: RandomProfileStockOrderWhereUniqueInput!): RandomProfileStockOrder
   stock(where: StockWhereUniqueInput!): Stock
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   randomProfilesConnection(where: RandomProfileWhereInput, orderBy: RandomProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RandomProfileConnection!
+  stockOrdersConnection(where: StockOrderWhereInput, orderBy: StockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockOrderConnection!
+  randomProfileStockOrdersConnection(where: RandomProfileStockOrderWhereInput, orderBy: RandomProfileStockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RandomProfileStockOrderConnection!
   stocksConnection(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockConnection!
 
   """Fetches an object given its ID"""
@@ -96,7 +122,7 @@ type RandomProfile implements Node {
   id: ID!
   name: String!
   money: Float
-  stock(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock!]
+  stocks(where: RandomProfileStockOrderWhereInput, orderBy: RandomProfileStockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RandomProfileStockOrder!]
 }
 
 """A connection to a list of items."""
@@ -113,7 +139,18 @@ input RandomProfileCreateInput {
   id: ID
   name: String!
   money: Float
-  stock: StockCreateManyInput
+  stocks: RandomProfileStockOrderCreateManyWithoutProfileInput
+}
+
+input RandomProfileCreateOneWithoutStocksInput {
+  create: RandomProfileCreateWithoutStocksInput
+  connect: RandomProfileWhereUniqueInput
+}
+
+input RandomProfileCreateWithoutStocksInput {
+  id: ID
+  name: String!
+  money: Float
 }
 
 """An edge in a connection."""
@@ -138,6 +175,354 @@ type RandomProfilePreviousValues {
   id: ID!
   name: String!
   money: Float
+}
+
+type RandomProfileStockOrder implements Node {
+  id: ID!
+  stock: Stock!
+  profile: RandomProfile!
+  quantity: Float!
+  purchasedAt: Float!
+}
+
+"""A connection to a list of items."""
+type RandomProfileStockOrderConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [RandomProfileStockOrderEdge]!
+  aggregate: AggregateRandomProfileStockOrder!
+}
+
+input RandomProfileStockOrderCreateInput {
+  id: ID
+  quantity: Float
+  purchasedAt: Float!
+  stock: StockCreateOneInput!
+  profile: RandomProfileCreateOneWithoutStocksInput!
+}
+
+input RandomProfileStockOrderCreateManyWithoutProfileInput {
+  create: [RandomProfileStockOrderCreateWithoutProfileInput!]
+  connect: [RandomProfileStockOrderWhereUniqueInput!]
+}
+
+input RandomProfileStockOrderCreateWithoutProfileInput {
+  id: ID
+  quantity: Float
+  purchasedAt: Float!
+  stock: StockCreateOneInput!
+}
+
+"""An edge in a connection."""
+type RandomProfileStockOrderEdge {
+  """The item at the end of the edge."""
+  node: RandomProfileStockOrder!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum RandomProfileStockOrderOrderByInput {
+  id_ASC
+  id_DESC
+  quantity_ASC
+  quantity_DESC
+  purchasedAt_ASC
+  purchasedAt_DESC
+}
+
+type RandomProfileStockOrderPreviousValues {
+  id: ID!
+  quantity: Float!
+  purchasedAt: Float!
+}
+
+input RandomProfileStockOrderScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RandomProfileStockOrderScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RandomProfileStockOrderScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RandomProfileStockOrderScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  quantity: Float
+
+  """All values that are not equal to given value."""
+  quantity_not: Float
+
+  """All values that are contained in given list."""
+  quantity_in: [Float!]
+
+  """All values that are not contained in given list."""
+  quantity_not_in: [Float!]
+
+  """All values less than the given value."""
+  quantity_lt: Float
+
+  """All values less than or equal the given value."""
+  quantity_lte: Float
+
+  """All values greater than the given value."""
+  quantity_gt: Float
+
+  """All values greater than or equal the given value."""
+  quantity_gte: Float
+  purchasedAt: Float
+
+  """All values that are not equal to given value."""
+  purchasedAt_not: Float
+
+  """All values that are contained in given list."""
+  purchasedAt_in: [Float!]
+
+  """All values that are not contained in given list."""
+  purchasedAt_not_in: [Float!]
+
+  """All values less than the given value."""
+  purchasedAt_lt: Float
+
+  """All values less than or equal the given value."""
+  purchasedAt_lte: Float
+
+  """All values greater than the given value."""
+  purchasedAt_gt: Float
+
+  """All values greater than or equal the given value."""
+  purchasedAt_gte: Float
+}
+
+type RandomProfileStockOrderSubscriptionPayload {
+  mutation: MutationType!
+  node: RandomProfileStockOrder
+  updatedFields: [String!]
+  previousValues: RandomProfileStockOrderPreviousValues
+}
+
+input RandomProfileStockOrderSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RandomProfileStockOrderSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RandomProfileStockOrderSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RandomProfileStockOrderSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: RandomProfileStockOrderWhereInput
+}
+
+input RandomProfileStockOrderUpdateInput {
+  quantity: Float
+  purchasedAt: Float
+  stock: StockUpdateOneRequiredInput
+  profile: RandomProfileUpdateOneRequiredWithoutStocksInput
+}
+
+input RandomProfileStockOrderUpdateManyDataInput {
+  quantity: Float
+  purchasedAt: Float
+}
+
+input RandomProfileStockOrderUpdateManyMutationInput {
+  quantity: Float
+  purchasedAt: Float
+}
+
+input RandomProfileStockOrderUpdateManyWithoutProfileInput {
+  create: [RandomProfileStockOrderCreateWithoutProfileInput!]
+  connect: [RandomProfileStockOrderWhereUniqueInput!]
+  set: [RandomProfileStockOrderWhereUniqueInput!]
+  disconnect: [RandomProfileStockOrderWhereUniqueInput!]
+  delete: [RandomProfileStockOrderWhereUniqueInput!]
+  update: [RandomProfileStockOrderUpdateWithWhereUniqueWithoutProfileInput!]
+  updateMany: [RandomProfileStockOrderUpdateManyWithWhereNestedInput!]
+  deleteMany: [RandomProfileStockOrderScalarWhereInput!]
+  upsert: [RandomProfileStockOrderUpsertWithWhereUniqueWithoutProfileInput!]
+}
+
+input RandomProfileStockOrderUpdateManyWithWhereNestedInput {
+  where: RandomProfileStockOrderScalarWhereInput!
+  data: RandomProfileStockOrderUpdateManyDataInput!
+}
+
+input RandomProfileStockOrderUpdateWithoutProfileDataInput {
+  quantity: Float
+  purchasedAt: Float
+  stock: StockUpdateOneRequiredInput
+}
+
+input RandomProfileStockOrderUpdateWithWhereUniqueWithoutProfileInput {
+  where: RandomProfileStockOrderWhereUniqueInput!
+  data: RandomProfileStockOrderUpdateWithoutProfileDataInput!
+}
+
+input RandomProfileStockOrderUpsertWithWhereUniqueWithoutProfileInput {
+  where: RandomProfileStockOrderWhereUniqueInput!
+  update: RandomProfileStockOrderUpdateWithoutProfileDataInput!
+  create: RandomProfileStockOrderCreateWithoutProfileInput!
+}
+
+input RandomProfileStockOrderWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RandomProfileStockOrderWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RandomProfileStockOrderWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RandomProfileStockOrderWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  quantity: Float
+
+  """All values that are not equal to given value."""
+  quantity_not: Float
+
+  """All values that are contained in given list."""
+  quantity_in: [Float!]
+
+  """All values that are not contained in given list."""
+  quantity_not_in: [Float!]
+
+  """All values less than the given value."""
+  quantity_lt: Float
+
+  """All values less than or equal the given value."""
+  quantity_lte: Float
+
+  """All values greater than the given value."""
+  quantity_gt: Float
+
+  """All values greater than or equal the given value."""
+  quantity_gte: Float
+  purchasedAt: Float
+
+  """All values that are not equal to given value."""
+  purchasedAt_not: Float
+
+  """All values that are contained in given list."""
+  purchasedAt_in: [Float!]
+
+  """All values that are not contained in given list."""
+  purchasedAt_not_in: [Float!]
+
+  """All values less than the given value."""
+  purchasedAt_lt: Float
+
+  """All values less than or equal the given value."""
+  purchasedAt_lte: Float
+
+  """All values greater than the given value."""
+  purchasedAt_gt: Float
+
+  """All values greater than or equal the given value."""
+  purchasedAt_gte: Float
+  stock: StockWhereInput
+  profile: RandomProfileWhereInput
+}
+
+input RandomProfileStockOrderWhereUniqueInput {
+  id: ID
 }
 
 type RandomProfileSubscriptionPayload {
@@ -182,12 +567,29 @@ input RandomProfileSubscriptionWhereInput {
 input RandomProfileUpdateInput {
   name: String
   money: Float
-  stock: StockUpdateManyInput
+  stocks: RandomProfileStockOrderUpdateManyWithoutProfileInput
 }
 
 input RandomProfileUpdateManyMutationInput {
   name: String
   money: Float
+}
+
+input RandomProfileUpdateOneRequiredWithoutStocksInput {
+  create: RandomProfileCreateWithoutStocksInput
+  connect: RandomProfileWhereUniqueInput
+  update: RandomProfileUpdateWithoutStocksDataInput
+  upsert: RandomProfileUpsertWithoutStocksInput
+}
+
+input RandomProfileUpdateWithoutStocksDataInput {
+  name: String
+  money: Float
+}
+
+input RandomProfileUpsertWithoutStocksInput {
+  update: RandomProfileUpdateWithoutStocksDataInput!
+  create: RandomProfileCreateWithoutStocksInput!
 }
 
 input RandomProfileWhereInput {
@@ -301,9 +703,9 @@ input RandomProfileWhereInput {
 
   """All values greater than or equal the given value."""
   money_gte: Float
-  stock_every: StockWhereInput
-  stock_some: StockWhereInput
-  stock_none: StockWhereInput
+  stocks_every: RandomProfileStockOrderWhereInput
+  stocks_some: RandomProfileStockOrderWhereInput
+  stocks_none: RandomProfileStockOrderWhereInput
 }
 
 input RandomProfileWhereUniqueInput {
@@ -315,7 +717,7 @@ type Stock implements Node {
   name: String!
   symbol: String!
   opening: Float
-  current: Float
+  price: Float
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -335,12 +737,12 @@ input StockCreateInput {
   name: String!
   symbol: String!
   opening: Float
-  current: Float
+  price: Float
 }
 
-input StockCreateManyInput {
-  create: [StockCreateInput!]
-  connect: [StockWhereUniqueInput!]
+input StockCreateOneInput {
+  create: StockCreateInput
+  connect: StockWhereUniqueInput
 }
 
 """An edge in a connection."""
@@ -352,6 +754,14 @@ type StockEdge {
   cursor: String!
 }
 
+type StockOrder implements Node {
+  id: ID!
+  stock: Stock!
+  user: User!
+  quantity: Float!
+  purchasedAt: Float!
+}
+
 enum StockOrderByInput {
   id_ASC
   id_DESC
@@ -361,33 +771,77 @@ enum StockOrderByInput {
   symbol_DESC
   opening_ASC
   opening_DESC
-  current_ASC
-  current_DESC
+  price_ASC
+  price_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
-type StockPreviousValues {
-  id: ID!
-  name: String!
-  symbol: String!
-  opening: Float
-  current: Float
-  createdAt: DateTime!
-  updatedAt: DateTime!
+"""A connection to a list of items."""
+type StockOrderConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [StockOrderEdge]!
+  aggregate: AggregateStockOrder!
 }
 
-input StockScalarWhereInput {
+input StockOrderCreateInput {
+  id: ID
+  quantity: Float
+  purchasedAt: Float!
+  stock: StockCreateOneInput!
+  user: UserCreateOneWithoutStocksInput!
+}
+
+input StockOrderCreateManyWithoutUserInput {
+  create: [StockOrderCreateWithoutUserInput!]
+  connect: [StockOrderWhereUniqueInput!]
+}
+
+input StockOrderCreateWithoutUserInput {
+  id: ID
+  quantity: Float
+  purchasedAt: Float!
+  stock: StockCreateOneInput!
+}
+
+"""An edge in a connection."""
+type StockOrderEdge {
+  """The item at the end of the edge."""
+  node: StockOrder!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum StockOrderOrderByInput {
+  id_ASC
+  id_DESC
+  quantity_ASC
+  quantity_DESC
+  purchasedAt_ASC
+  purchasedAt_DESC
+}
+
+type StockOrderPreviousValues {
+  id: ID!
+  quantity: Float!
+  purchasedAt: Float!
+}
+
+input StockOrderScalarWhereInput {
   """Logical AND on all given filters."""
-  AND: [StockScalarWhereInput!]
+  AND: [StockOrderScalarWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [StockScalarWhereInput!]
+  OR: [StockOrderScalarWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [StockScalarWhereInput!]
+  NOT: [StockOrderScalarWhereInput!]
   id: ID
 
   """All values that are not equal to given value."""
@@ -428,174 +882,251 @@ input StockScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
+  quantity: Float
 
   """All values that are not equal to given value."""
-  name_not: String
+  quantity_not: Float
 
   """All values that are contained in given list."""
-  name_in: [String!]
+  quantity_in: [Float!]
 
   """All values that are not contained in given list."""
-  name_not_in: [String!]
+  quantity_not_in: [Float!]
 
   """All values less than the given value."""
-  name_lt: String
+  quantity_lt: Float
 
   """All values less than or equal the given value."""
-  name_lte: String
+  quantity_lte: Float
 
   """All values greater than the given value."""
-  name_gt: String
+  quantity_gt: Float
 
   """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  symbol: String
+  quantity_gte: Float
+  purchasedAt: Float
 
   """All values that are not equal to given value."""
-  symbol_not: String
+  purchasedAt_not: Float
 
   """All values that are contained in given list."""
-  symbol_in: [String!]
+  purchasedAt_in: [Float!]
 
   """All values that are not contained in given list."""
-  symbol_not_in: [String!]
+  purchasedAt_not_in: [Float!]
 
   """All values less than the given value."""
-  symbol_lt: String
+  purchasedAt_lt: Float
 
   """All values less than or equal the given value."""
-  symbol_lte: String
+  purchasedAt_lte: Float
 
   """All values greater than the given value."""
-  symbol_gt: String
+  purchasedAt_gt: Float
 
   """All values greater than or equal the given value."""
-  symbol_gte: String
+  purchasedAt_gte: Float
+}
+
+type StockOrderSubscriptionPayload {
+  mutation: MutationType!
+  node: StockOrder
+  updatedFields: [String!]
+  previousValues: StockOrderPreviousValues
+}
+
+input StockOrderSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [StockOrderSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [StockOrderSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [StockOrderSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: StockOrderWhereInput
+}
+
+input StockOrderUpdateInput {
+  quantity: Float
+  purchasedAt: Float
+  stock: StockUpdateOneRequiredInput
+  user: UserUpdateOneRequiredWithoutStocksInput
+}
+
+input StockOrderUpdateManyDataInput {
+  quantity: Float
+  purchasedAt: Float
+}
+
+input StockOrderUpdateManyMutationInput {
+  quantity: Float
+  purchasedAt: Float
+}
+
+input StockOrderUpdateManyWithoutUserInput {
+  create: [StockOrderCreateWithoutUserInput!]
+  connect: [StockOrderWhereUniqueInput!]
+  set: [StockOrderWhereUniqueInput!]
+  disconnect: [StockOrderWhereUniqueInput!]
+  delete: [StockOrderWhereUniqueInput!]
+  update: [StockOrderUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [StockOrderUpdateManyWithWhereNestedInput!]
+  deleteMany: [StockOrderScalarWhereInput!]
+  upsert: [StockOrderUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input StockOrderUpdateManyWithWhereNestedInput {
+  where: StockOrderScalarWhereInput!
+  data: StockOrderUpdateManyDataInput!
+}
+
+input StockOrderUpdateWithoutUserDataInput {
+  quantity: Float
+  purchasedAt: Float
+  stock: StockUpdateOneRequiredInput
+}
+
+input StockOrderUpdateWithWhereUniqueWithoutUserInput {
+  where: StockOrderWhereUniqueInput!
+  data: StockOrderUpdateWithoutUserDataInput!
+}
+
+input StockOrderUpsertWithWhereUniqueWithoutUserInput {
+  where: StockOrderWhereUniqueInput!
+  update: StockOrderUpdateWithoutUserDataInput!
+  create: StockOrderCreateWithoutUserInput!
+}
+
+input StockOrderWhereInput {
+  """Logical AND on all given filters."""
+  AND: [StockOrderWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [StockOrderWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [StockOrderWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
 
   """All values containing the given string."""
-  symbol_contains: String
+  id_contains: ID
 
   """All values not containing the given string."""
-  symbol_not_contains: String
+  id_not_contains: ID
 
   """All values starting with the given string."""
-  symbol_starts_with: String
+  id_starts_with: ID
 
   """All values not starting with the given string."""
-  symbol_not_starts_with: String
+  id_not_starts_with: ID
 
   """All values ending with the given string."""
-  symbol_ends_with: String
+  id_ends_with: ID
 
   """All values not ending with the given string."""
-  symbol_not_ends_with: String
+  id_not_ends_with: ID
+  quantity: Float
+
+  """All values that are not equal to given value."""
+  quantity_not: Float
+
+  """All values that are contained in given list."""
+  quantity_in: [Float!]
+
+  """All values that are not contained in given list."""
+  quantity_not_in: [Float!]
+
+  """All values less than the given value."""
+  quantity_lt: Float
+
+  """All values less than or equal the given value."""
+  quantity_lte: Float
+
+  """All values greater than the given value."""
+  quantity_gt: Float
+
+  """All values greater than or equal the given value."""
+  quantity_gte: Float
+  purchasedAt: Float
+
+  """All values that are not equal to given value."""
+  purchasedAt_not: Float
+
+  """All values that are contained in given list."""
+  purchasedAt_in: [Float!]
+
+  """All values that are not contained in given list."""
+  purchasedAt_not_in: [Float!]
+
+  """All values less than the given value."""
+  purchasedAt_lt: Float
+
+  """All values less than or equal the given value."""
+  purchasedAt_lte: Float
+
+  """All values greater than the given value."""
+  purchasedAt_gt: Float
+
+  """All values greater than or equal the given value."""
+  purchasedAt_gte: Float
+  stock: StockWhereInput
+  user: UserWhereInput
+}
+
+input StockOrderWhereUniqueInput {
+  id: ID
+}
+
+type StockPreviousValues {
+  id: ID!
+  name: String!
+  symbol: String!
   opening: Float
-
-  """All values that are not equal to given value."""
-  opening_not: Float
-
-  """All values that are contained in given list."""
-  opening_in: [Float!]
-
-  """All values that are not contained in given list."""
-  opening_not_in: [Float!]
-
-  """All values less than the given value."""
-  opening_lt: Float
-
-  """All values less than or equal the given value."""
-  opening_lte: Float
-
-  """All values greater than the given value."""
-  opening_gt: Float
-
-  """All values greater than or equal the given value."""
-  opening_gte: Float
-  current: Float
-
-  """All values that are not equal to given value."""
-  current_not: Float
-
-  """All values that are contained in given list."""
-  current_in: [Float!]
-
-  """All values that are not contained in given list."""
-  current_not_in: [Float!]
-
-  """All values less than the given value."""
-  current_lt: Float
-
-  """All values less than or equal the given value."""
-  current_lte: Float
-
-  """All values greater than the given value."""
-  current_gt: Float
-
-  """All values greater than or equal the given value."""
-  current_gte: Float
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
+  price: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type StockSubscriptionPayload {
@@ -641,54 +1172,31 @@ input StockUpdateDataInput {
   name: String
   symbol: String
   opening: Float
-  current: Float
+  price: Float
 }
 
 input StockUpdateInput {
   name: String
   symbol: String
   opening: Float
-  current: Float
-}
-
-input StockUpdateManyDataInput {
-  name: String
-  symbol: String
-  opening: Float
-  current: Float
-}
-
-input StockUpdateManyInput {
-  create: [StockCreateInput!]
-  connect: [StockWhereUniqueInput!]
-  set: [StockWhereUniqueInput!]
-  disconnect: [StockWhereUniqueInput!]
-  delete: [StockWhereUniqueInput!]
-  update: [StockUpdateWithWhereUniqueNestedInput!]
-  updateMany: [StockUpdateManyWithWhereNestedInput!]
-  deleteMany: [StockScalarWhereInput!]
-  upsert: [StockUpsertWithWhereUniqueNestedInput!]
+  price: Float
 }
 
 input StockUpdateManyMutationInput {
   name: String
   symbol: String
   opening: Float
-  current: Float
+  price: Float
 }
 
-input StockUpdateManyWithWhereNestedInput {
-  where: StockScalarWhereInput!
-  data: StockUpdateManyDataInput!
+input StockUpdateOneRequiredInput {
+  create: StockCreateInput
+  connect: StockWhereUniqueInput
+  update: StockUpdateDataInput
+  upsert: StockUpsertNestedInput
 }
 
-input StockUpdateWithWhereUniqueNestedInput {
-  where: StockWhereUniqueInput!
-  data: StockUpdateDataInput!
-}
-
-input StockUpsertWithWhereUniqueNestedInput {
-  where: StockWhereUniqueInput!
+input StockUpsertNestedInput {
   update: StockUpdateDataInput!
   create: StockCreateInput!
 }
@@ -844,28 +1352,28 @@ input StockWhereInput {
 
   """All values greater than or equal the given value."""
   opening_gte: Float
-  current: Float
+  price: Float
 
   """All values that are not equal to given value."""
-  current_not: Float
+  price_not: Float
 
   """All values that are contained in given list."""
-  current_in: [Float!]
+  price_in: [Float!]
 
   """All values that are not contained in given list."""
-  current_not_in: [Float!]
+  price_not_in: [Float!]
 
   """All values less than the given value."""
-  current_lt: Float
+  price_lt: Float
 
   """All values less than or equal the given value."""
-  current_lte: Float
+  price_lte: Float
 
   """All values greater than the given value."""
-  current_gt: Float
+  price_gt: Float
 
   """All values greater than or equal the given value."""
-  current_gte: Float
+  price_gte: Float
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -921,6 +1429,8 @@ input StockWhereUniqueInput {
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   randomProfile(where: RandomProfileSubscriptionWhereInput): RandomProfileSubscriptionPayload
+  stockOrder(where: StockOrderSubscriptionWhereInput): StockOrderSubscriptionPayload
+  randomProfileStockOrder(where: RandomProfileStockOrderSubscriptionWhereInput): RandomProfileStockOrderSubscriptionPayload
   stock(where: StockSubscriptionWhereInput): StockSubscriptionPayload
 }
 
@@ -929,7 +1439,7 @@ type User implements Node {
   name: String!
   email: String!
   money: Float
-  stock(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock!]
+  stocks(where: StockOrderWhereInput, orderBy: StockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockOrder!]
 }
 
 """A connection to a list of items."""
@@ -947,7 +1457,19 @@ input UserCreateInput {
   name: String!
   email: String!
   money: Float
-  stock: StockCreateManyInput
+  stocks: StockOrderCreateManyWithoutUserInput
+}
+
+input UserCreateOneWithoutStocksInput {
+  create: UserCreateWithoutStocksInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutStocksInput {
+  id: ID
+  name: String!
+  email: String!
+  money: Float
 }
 
 """An edge in a connection."""
@@ -1020,13 +1542,31 @@ input UserUpdateInput {
   name: String
   email: String
   money: Float
-  stock: StockUpdateManyInput
+  stocks: StockOrderUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
   email: String
   money: Float
+}
+
+input UserUpdateOneRequiredWithoutStocksInput {
+  create: UserCreateWithoutStocksInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutStocksDataInput
+  upsert: UserUpsertWithoutStocksInput
+}
+
+input UserUpdateWithoutStocksDataInput {
+  name: String
+  email: String
+  money: Float
+}
+
+input UserUpsertWithoutStocksInput {
+  update: UserUpdateWithoutStocksDataInput!
+  create: UserCreateWithoutStocksInput!
 }
 
 input UserWhereInput {
@@ -1180,9 +1720,9 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   money_gte: Float
-  stock_every: StockWhereInput
-  stock_some: StockWhereInput
-  stock_none: StockWhereInput
+  stocks_every: StockOrderWhereInput
+  stocks_some: StockOrderWhereInput
+  stocks_none: StockOrderWhereInput
 }
 
 input UserWhereUniqueInput {

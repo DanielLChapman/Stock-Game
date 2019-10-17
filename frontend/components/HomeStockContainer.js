@@ -6,6 +6,7 @@ class HomeStockContainer extends Component {
     static propTypes = {
         randomProfile: PropTypes.object.isRequired,
     };
+    //LEAVING AS IS, MOVING ONTO STOCK PURCHASING FOR INDIVIDUALS
 
     render() {
         return (

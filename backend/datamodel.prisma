@@ -3,7 +3,7 @@ type Stock {
   name: String! @unique
   symbol: String! @unique
   opening: Float
-  current: Float
+  price: Float
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -13,12 +13,28 @@ type User {
   name: String!
   email: String!
   money: Float @default(value: 10000000)
-  stock: [Stock]
+  stocks: [StockOrder]
 }
 
 type RandomProfile {
   id: ID! @id
   name: String!
   money: Float @default(value: 10000000)
-  stock: [Stock]
+  stocks: [RandomProfileStockOrder]
+}
+
+type StockOrder {
+  id: ID! @id
+  stock: Stock!
+  user: User!
+  quantity: Float! @default(value: 1)
+  purchasedAt: Float!
+}
+
+type RandomProfileStockOrder {
+  id: ID! @id
+  stock: Stock!
+  profile: RandomProfile!
+  quantity: Float! @default(value: 1)
+  purchasedAt: Float!
 }

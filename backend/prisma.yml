@@ -4,3 +4,5 @@ datamodel: datamodel.prisma
 hooks:
   post-deploy:
     - graphql get-schema -p prisma
+
+#10 requests per 10 seconds, queue up to 25 requests
