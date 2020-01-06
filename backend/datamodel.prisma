@@ -1,3 +1,12 @@
+enum Permission {
+  ADMIN
+  USER
+  STOCKCREATE
+  STOCKUPDATE
+  STOCKDELETE
+  PERMISSIONUPDATE
+}
+
 type Stock {
   id: ID! @id
   name: String! @unique
@@ -11,7 +20,11 @@ type Stock {
 type User {
   id: ID! @id
   name: String!
-  email: String!
+  email: String! @unique
+  password: String! 
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: [Permission] @scalarList(strategy: RELATION)
   money: Float @default(value: 10000000)
   stocks: [StockOrder]
 }

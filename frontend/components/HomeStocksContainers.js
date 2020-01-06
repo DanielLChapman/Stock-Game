@@ -42,7 +42,8 @@ class HomeStocksContainers extends Component {
                         if (loading) return <p>Loading...</p>;
                         if (error) return <p>Error: {error.message}</p>;
                         return (
-                            <ProfilesList >{data.randomProfiles.map(item => <HomeStocksContainer randomProfile={item} />)}</ProfilesList>
+                                <ProfilesList>{data.randomProfiles.map(item => <HomeStocksContainer randomProfile={item} key={item.id}/>)}</ProfilesList>
+                            
                         );
                     }}
                 </Query>
