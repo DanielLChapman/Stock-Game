@@ -9,10 +9,15 @@ const server = createServer();
 server.express.use(cookieParser());
 //use express middleware to populate current user
 
-server.start({
-    cors: true,
-    origin: process.env.FRONTEND_URL,
-},
-infor => {
-    console.log(`Server is now running on http:/localhost:${infor.port}`);
-})
+
+server.start(
+    {
+      cors: {
+        credentials: true,
+        origin: process.env.FRONTEND_URL,
+      },
+    },
+    deets => {
+      console.log(`Server is now running on port http://localhost:${deets.port}`);
+    }
+  );
