@@ -8,5 +8,8 @@ type Mutation {
 
 type Query {
     stocks: [Stock]!
+    stock(where: StockWhereUniqueInput!): Stock!
+    stocksConnection(where: StockWhereInput): StockConnection!
     randomProfiles: [RandomProfile]!
+    me: User
 }
