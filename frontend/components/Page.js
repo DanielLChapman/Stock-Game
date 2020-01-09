@@ -39,7 +39,7 @@ injectGlobal`
 		line-height: 2;
 		font-family: Arial, sans-serif;
 	}
-	a {
+	a, .a-button {
 		text-decoration: none;
 		color: ${theme.black};
     }

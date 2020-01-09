@@ -3,6 +3,8 @@ import NavStyles from './styles/NavStyles';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import User from './User';
+import Signout from './Signout';
+import {Mutation } from 'react-apollo';
 
 Router.onRouteChangeStart = () => {
     NProgress.start();
@@ -50,9 +52,7 @@ const Nav = () => (
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/login">
-                                        <a>Logout</a>
-                                    </Link>
+                                    <Signout />
                                 </li>
                             </>
                         )}
@@ -60,7 +60,7 @@ const Nav = () => (
                             <>
                                 <li>
                                     <Link href="/signup">
-                                        <a>Signup</a>
+                                        <a>Sign Up / Sign In</a>
                                     </Link>
                                 </li>
                             </>

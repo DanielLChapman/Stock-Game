@@ -32,7 +32,7 @@ const NavStyles = styled.nav`
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 1px;
-      a {
+      a, button {
         color: rgba(0,0,0,.7);
         text-decoration: none;
         position: relative;
