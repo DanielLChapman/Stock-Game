@@ -5,9 +5,9 @@ import Form from './styles/Form';
 import Error from './ErrorMessage';
 import { CURRENT_USER_QUERY } from './User'
 
-const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-    signup(email: $email, name: $name, password: $password) {
+const SIGNIN_MUTATION = gql`
+  mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
       id
       email
       name
@@ -15,9 +15,8 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-class Signup extends Component {
+class Signin extends Component {
   state = {
-    name: '',
     email: '',
     password: '',
   };
@@ -27,21 +26,21 @@ class Signup extends Component {
   render() {
     return (
       <Mutation
-        mutation={SIGNUP_MUTATION}
+        mutation={SIGNIN_MUTATION}
         variables={this.state}
         refetchQueries={[{query: CURRENT_USER_QUERY}]}
       >
-        {(signup, { error, loading }) => (
+        {(signin, { error, loading }) => (
           <Form
             method="post"
             onSubmit={async e => {
               e.preventDefault();
-              await signup();
+              await signin();
               this.setState({ name: '', email: '', password: '' });
             }}
           >
             <fieldset disabled={loading} aria-busy={loading}>
-              <h2>Sign Up for An Account</h2>
+              <h2>Sign Into Your Account</h2>
               <Error error={error} />
               <label htmlFor="email">
                 Email
@@ -53,16 +52,7 @@ class Signup extends Component {
                   onChange={this.saveToState}
                 />
               </label>
-              <label htmlFor="name">
-                Name
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="name"
-                  value={this.state.name}
-                  onChange={this.saveToState}
-                />
-              </label>
+
               <label htmlFor="password">
                 Password
                 <input
@@ -74,7 +64,7 @@ class Signup extends Component {
                 />
               </label>
 
-              <button type="submit">Sign Up!</button>
+              <button type="submit">Sign In!</button>
             </fieldset>
           </Form>
         )}
@@ -83,5 +73,5 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
-export { SIGNUP_MUTATION };
+export default Signin;
+export { SIGNIN_MUTATION };

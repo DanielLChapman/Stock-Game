@@ -21,34 +21,58 @@ const Nav = () => (
         </h1>
         
         <ul>
-            <User>
-                {({data: { me }}) => {
-                    if(me) {
-                        return <li>{me.name}</li>
-                    }
-                    return null;
-                }}
-            </User>
+           
             <li>
                 <Link href="/">
                     <a>Home</a>
                 </Link>
             </li>
-            <li>
-                <Link href="/sell">
-                    <a>Sell</a>
-                </Link>
-            </li>
-            <li>
-                <Link href="/search">
-                    <a>Search</a>
-                </Link>
-            </li>
-            <li>
-                <Link href="/login">
-                    <a>Login</a>
-                </Link>
-            </li>
+            <User>
+                 {({data: { me }}) => (
+                     <>
+                        <li>
+                            <Link href="/search">
+                                <a>Search</a>
+                            </Link>
+                        </li>
+                
+                    
+                        {me && (
+                            <>
+                                <li>
+                                    <Link href="/sell">
+                                        <a>Sell</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/account">
+                                        <a>{me.name}</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/login">
+                                        <a>Logout</a>
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+                        {!me && (
+                            <>
+                                <li>
+                                    <Link href="/signup">
+                                        <a>Signup</a>
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+
+                        
+                    </>
+                    
+                    
+                )}
+            </User>
+            
         </ul>
     </NavStyles>
 )

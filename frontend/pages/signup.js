@@ -1,5 +1,7 @@
 import React from 'react';
 import Signup from '../components/Signup';
+
+import Signin from '../components/Signin'
 import styled from 'styled-components';
 
 const columns = styled.div`
@@ -11,7 +13,7 @@ grid-gap: 20px;
 const SignupPage = props => (
     <columns>
         <Signup />
-        <Signup />
+        <Signin />
         <Signup />
     </columns>
 )
