@@ -1,8 +1,12 @@
 import React from 'react';
+import PleaseSignIn from '../components/PleaseSignIn';
 
 const Sell = props => (
     <div>
-        <p>Sell</p>
+        <PleaseSignIn>
+            <p>Sell</p>
+        </PleaseSignIn>
+        
     </div>
 )
 export default Sell;
