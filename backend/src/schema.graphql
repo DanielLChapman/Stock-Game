@@ -19,6 +19,7 @@ type Query {
     stocksConnection(where: StockWhereInput): StockConnection!
     randomProfiles: [RandomProfile]!
     me: User
+    users: [User]!
 }
 
 type User {
