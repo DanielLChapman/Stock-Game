@@ -56,7 +56,7 @@ const Permissions = (props) => (
                             </tr>
                         </thead>
                         <tbody>
-                            {data.users.map(user => <UserPermissions key={user.id} user={user} />)}
+                            {data.users && data.users.map(user => <UserPermissions key={user.id} user={user} />)}
                         </tbody>
                     </Table>
                 </div>
