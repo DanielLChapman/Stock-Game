@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import Table from './styles/Table';
 import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
+import { CURRENT_USER_QUERY } from '../components/User';
 
 const possiblePermissions = [
     'ADMIN',
@@ -37,7 +38,7 @@ const UPDATE_PERMISSIONS_MUTATION = gql`
 `;
 
 const Permissions = (props) => (
-    <Query query={ALL_USERS_QUERY}>
+    <Query query={ALL_USERS_QUERY} refetchQueries={[{query: CURRENT_USER_QUERY}]}>
         {({data, loading, error}) =>  (
             <div>
                 <Error error={error} />

@@ -54,8 +54,9 @@ injectGlobal`
         display: inline-block;
         position: relative;
         top: 0;
-        margin-top: -14px;
+        margin-top: -5px;
         padding-left: 5px;
+        
     }
     h1, h2, h3, h4, h5, h6 {
         color: #000;

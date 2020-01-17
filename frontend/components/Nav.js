@@ -51,6 +51,17 @@ const Nav = () => (
                                         <a>{me.name}</a>
                                     </Link>
                                 </li>
+                                {
+                                    me.permissions.some(r => {
+                                        return ['ADMIN', 'PERMISSIONUPDATE'].includes(r);
+                                    }) && (
+                                        <li>
+                                            <Link href="/permissions">
+                                                <a>Permissions</a>
+                                            </Link>
+                                        </li>
+                                    )
+                                }
                                 <li>
                                     <Signout />
                                 </li>
