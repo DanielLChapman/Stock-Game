@@ -19,7 +19,6 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-plugin-styled-components": "^1.10.6",
     "date-fns": "^2.9.0",
-    "dotenv": "^6.0.0",
     "downshift": "^2.2.3",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
