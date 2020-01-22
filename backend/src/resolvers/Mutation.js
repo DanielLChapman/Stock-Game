@@ -8,7 +8,28 @@ const { hasPermission } = require('../utils');
 const Mutations = {
    async createStock(parent, args, ctx, info) {
         //TODO Check if admin
+        //check if logged in 
+        /*if (!ctx.request.userId) {
+            throw new Error('You must be logged in');
+         };
+        //query current user
+         const currentUser = await ctx.db.query.user({
+             where: {
+                 id: ctx.request.userId
+             }
+         }, info);
+        //check if they have permissions to do thia
+        hasPermission(currentUser, ['ADMIN', 'STOCKCREATE']);*/
+        //find grouping
+        const lastStock = await ctx.db.query.stocks({ 
+
+        }, info);
+
+        console.log(lastStock)
         
+        return lastStock[0];
+        console.log(lastStock);
+
         const stock = await ctx.db.mutation.createStock({
             data: {
                 ...args

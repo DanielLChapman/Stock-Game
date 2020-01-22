@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/daniel-chapman-a5ce0d/stock-game/dev
-# timestamp: Mon Jan 06 2020 16:36:04 GMT-0500 (Eastern Standard Time)
+# timestamp: Wed Jan 22 2020 16:21:25 GMT-0500 (Eastern Standard Time)
 
 type AggregateRandomProfile {
   count: Int!
@@ -100,6 +100,7 @@ enum Permission {
   STOCKCREATE
   STOCKUPDATE
   STOCKDELETE
+  RANDOMPROFILEMANAGE
   PERMISSIONUPDATE
 }
 
@@ -360,9 +361,7 @@ input RandomProfileStockOrderSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [RandomProfileStockOrderSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -551,9 +550,7 @@ input RandomProfileSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [RandomProfileSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -727,6 +724,7 @@ type Stock implements Node {
   symbol: String!
   opening: Float
   price: Float
+  grouping: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -747,6 +745,7 @@ input StockCreateInput {
   symbol: String!
   opening: Float
   price: Float
+  grouping: Float!
 }
 
 input StockCreateOneInput {
@@ -782,6 +781,8 @@ enum StockOrderByInput {
   opening_DESC
   price_ASC
   price_DESC
+  grouping_ASC
+  grouping_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -954,9 +955,7 @@ input StockOrderSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [StockOrderSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -1134,6 +1133,7 @@ type StockPreviousValues {
   symbol: String!
   opening: Float
   price: Float
+  grouping: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1155,9 +1155,7 @@ input StockSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [StockSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -1182,6 +1180,7 @@ input StockUpdateDataInput {
   symbol: String
   opening: Float
   price: Float
+  grouping: Float
 }
 
 input StockUpdateInput {
@@ -1189,6 +1188,7 @@ input StockUpdateInput {
   symbol: String
   opening: Float
   price: Float
+  grouping: Float
 }
 
 input StockUpdateManyMutationInput {
@@ -1196,6 +1196,7 @@ input StockUpdateManyMutationInput {
   symbol: String
   opening: Float
   price: Float
+  grouping: Float
 }
 
 input StockUpdateOneRequiredInput {
@@ -1383,6 +1384,28 @@ input StockWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
+  grouping: Float
+
+  """All values that are not equal to given value."""
+  grouping_not: Float
+
+  """All values that are contained in given list."""
+  grouping_in: [Float!]
+
+  """All values that are not contained in given list."""
+  grouping_not_in: [Float!]
+
+  """All values less than the given value."""
+  grouping_lt: Float
+
+  """All values less than or equal the given value."""
+  grouping_lte: Float
+
+  """All values greater than the given value."""
+  grouping_gt: Float
+
+  """All values greater than or equal the given value."""
+  grouping_gte: Float
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1551,9 +1574,7 @@ input UserSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [UserSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """

@@ -4,6 +4,7 @@ enum Permission {
   STOCKCREATE
   STOCKUPDATE
   STOCKDELETE
+  RANDOMPROFILEMANAGE
   PERMISSIONUPDATE
 }
 
@@ -13,6 +14,7 @@ type Stock {
   symbol: String! @unique
   opening: Float
   price: Float
+  grouping: Float!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
