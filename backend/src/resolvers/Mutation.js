@@ -9,7 +9,7 @@ const Mutations = {
    async createStock(parent, args, ctx, info) {
         //TODO Check if admin
         //check if logged in 
-        /*if (!ctx.request.userId) {
+        if (!ctx.request.userId) {
             throw new Error('You must be logged in');
          };
         //query current user
@@ -19,24 +19,31 @@ const Mutations = {
              }
          }, info);
         //check if they have permissions to do thia
-        hasPermission(currentUser, ['ADMIN', 'STOCKCREATE']);*/
+        hasPermission(currentUser, ['ADMIN', 'STOCKCREATE']);
         //find grouping
-        const lastStock = await ctx.db.query.stocks({ 
+        let foundLastGrouping = false;
+        let grouping = 0, i = 0;
+        while(!foundLastGrouping) {
+            const stocks = await ctx.db.query.stocks({ 
+                where: {
+                    grouping: i
+                }
+            }, info);
 
-        }, info);
-
-        console.log(lastStock)
-        
-        return lastStock[0];
-        console.log(lastStock);
+            if (stocks.length < 20) {
+                foundLastGrouping = true;
+                grouping = i;
+            } else {
+                i++;
+            }
+        }
 
         const stock = await ctx.db.mutation.createStock({
             data: {
-                ...args
+                ...args,
+                grouping
             }
         }, info);
-
-        console.log(stock);
 
         return stock;
 
