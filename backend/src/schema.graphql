@@ -6,7 +6,7 @@ type SuccessMessage {
 type Mutation {
     createStock(name: String, symbol: String, opening: Float, price: Float): Stock!
     createRandomProfile(name: String): RandomProfile!
-    signup(email: String!, password: String!, name: String!): User!
+    signup(email: String!, password: String!, name: String!, apikey: String): User!
     signin(email: String!, password: String!): User!
     signout: SuccessMessage
     requestReset(email: String!): SuccessMessage

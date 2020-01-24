@@ -20,6 +20,7 @@ class Signup extends Component {
     name: '',
     email: '',
     password: '',
+    apikey: '',
   };
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -37,7 +38,7 @@ class Signup extends Component {
             onSubmit={async e => {
               e.preventDefault();
               await signup();
-              this.setState({ name: '', email: '', password: '' });
+              this.setState({ name: '', email: '', password: '', apikey: '' });
             }}
           >
             <fieldset disabled={loading} aria-busy={loading}>
@@ -70,6 +71,16 @@ class Signup extends Component {
                   name="password"
                   placeholder="password"
                   value={this.state.password}
+                  onChange={this.saveToState}
+                />
+              </label>
+              <label htmlFor="apikey">
+                Alpha Vantage API Key (It's free. Can be updated later, not required now)
+                <input
+                  type="text"
+                  name="apikey"
+                  placeholder="apikey"
+                  value={this.state.apikey}
                   onChange={this.saveToState}
                 />
               </label>

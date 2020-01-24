@@ -260,9 +260,7 @@ const Mutations = {
                 console.log(error);
             }
             );
-
-        console.log(stocks);
-
+            
         //save to database
         for (var i = 0; i < stocks.length; i++) {
             const updatedStock = await ctx.db.mutation.updateStock({
