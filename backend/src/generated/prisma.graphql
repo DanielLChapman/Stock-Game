@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/daniel-chapman-a5ce0d/stock-game/dev
-# timestamp: Wed Jan 22 2020 16:21:25 GMT-0500 (Eastern Standard Time)
+# timestamp: Fri Jan 24 2020 17:18:49 GMT-0500 (Eastern Standard Time)
 
 type AggregateRandomProfile {
   count: Int!
@@ -722,8 +722,6 @@ type Stock implements Node {
   id: ID!
   name: String!
   symbol: String!
-  opening: Float
-  price: Float
   grouping: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -743,8 +741,6 @@ input StockCreateInput {
   id: ID
   name: String!
   symbol: String!
-  opening: Float
-  price: Float
   grouping: Float!
 }
 
@@ -777,10 +773,6 @@ enum StockOrderByInput {
   name_DESC
   symbol_ASC
   symbol_DESC
-  opening_ASC
-  opening_DESC
-  price_ASC
-  price_DESC
   grouping_ASC
   grouping_DESC
   createdAt_ASC
@@ -1131,8 +1123,6 @@ type StockPreviousValues {
   id: ID!
   name: String!
   symbol: String!
-  opening: Float
-  price: Float
   grouping: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1178,24 +1168,18 @@ input StockSubscriptionWhereInput {
 input StockUpdateDataInput {
   name: String
   symbol: String
-  opening: Float
-  price: Float
   grouping: Float
 }
 
 input StockUpdateInput {
   name: String
   symbol: String
-  opening: Float
-  price: Float
   grouping: Float
 }
 
 input StockUpdateManyMutationInput {
   name: String
   symbol: String
-  opening: Float
-  price: Float
   grouping: Float
 }
 
@@ -1340,50 +1324,6 @@ input StockWhereInput {
 
   """All values not ending with the given string."""
   symbol_not_ends_with: String
-  opening: Float
-
-  """All values that are not equal to given value."""
-  opening_not: Float
-
-  """All values that are contained in given list."""
-  opening_in: [Float!]
-
-  """All values that are not contained in given list."""
-  opening_not_in: [Float!]
-
-  """All values less than the given value."""
-  opening_lt: Float
-
-  """All values less than or equal the given value."""
-  opening_lte: Float
-
-  """All values greater than the given value."""
-  opening_gt: Float
-
-  """All values greater than or equal the given value."""
-  opening_gte: Float
-  price: Float
-
-  """All values that are not equal to given value."""
-  price_not: Float
-
-  """All values that are contained in given list."""
-  price_in: [Float!]
-
-  """All values that are not contained in given list."""
-  price_not_in: [Float!]
-
-  """All values less than the given value."""
-  price_lt: Float
-
-  """All values less than or equal the given value."""
-  price_lte: Float
-
-  """All values greater than the given value."""
-  price_gt: Float
-
-  """All values greater than or equal the given value."""
-  price_gte: Float
   grouping: Float
 
   """All values that are not equal to given value."""
@@ -1475,6 +1415,7 @@ type User implements Node {
   resetTokenExpiry: Float
   permissions: [Permission!]!
   money: Float
+  apikey: String
   stocks(where: StockOrderWhereInput, orderBy: StockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockOrder!]
 }
 
@@ -1496,6 +1437,7 @@ input UserCreateInput {
   resetToken: String
   resetTokenExpiry: Float
   money: Float
+  apikey: String
   permissions: UserCreatepermissionsInput
   stocks: StockOrderCreateManyWithoutUserInput
 }
@@ -1517,6 +1459,7 @@ input UserCreateWithoutStocksInput {
   resetToken: String
   resetTokenExpiry: Float
   money: Float
+  apikey: String
   permissions: UserCreatepermissionsInput
 }
 
@@ -1544,6 +1487,8 @@ enum UserOrderByInput {
   resetTokenExpiry_DESC
   money_ASC
   money_DESC
+  apikey_ASC
+  apikey_DESC
 }
 
 type UserPreviousValues {
@@ -1555,6 +1500,7 @@ type UserPreviousValues {
   resetTokenExpiry: Float
   permissions: [Permission!]!
   money: Float
+  apikey: String
 }
 
 type UserSubscriptionPayload {
@@ -1601,6 +1547,7 @@ input UserUpdateInput {
   resetToken: String
   resetTokenExpiry: Float
   money: Float
+  apikey: String
   permissions: UserUpdatepermissionsInput
   stocks: StockOrderUpdateManyWithoutUserInput
 }
@@ -1612,6 +1559,7 @@ input UserUpdateManyMutationInput {
   resetToken: String
   resetTokenExpiry: Float
   money: Float
+  apikey: String
   permissions: UserUpdatepermissionsInput
 }
 
@@ -1633,6 +1581,7 @@ input UserUpdateWithoutStocksDataInput {
   resetToken: String
   resetTokenExpiry: Float
   money: Float
+  apikey: String
   permissions: UserUpdatepermissionsInput
 }
 
@@ -1894,6 +1843,46 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   money_gte: Float
+  apikey: String
+
+  """All values that are not equal to given value."""
+  apikey_not: String
+
+  """All values that are contained in given list."""
+  apikey_in: [String!]
+
+  """All values that are not contained in given list."""
+  apikey_not_in: [String!]
+
+  """All values less than the given value."""
+  apikey_lt: String
+
+  """All values less than or equal the given value."""
+  apikey_lte: String
+
+  """All values greater than the given value."""
+  apikey_gt: String
+
+  """All values greater than or equal the given value."""
+  apikey_gte: String
+
+  """All values containing the given string."""
+  apikey_contains: String
+
+  """All values not containing the given string."""
+  apikey_not_contains: String
+
+  """All values starting with the given string."""
+  apikey_starts_with: String
+
+  """All values not starting with the given string."""
+  apikey_not_starts_with: String
+
+  """All values ending with the given string."""
+  apikey_ends_with: String
+
+  """All values not ending with the given string."""
+  apikey_not_ends_with: String
   stocks_every: StockOrderWhereInput
   stocks_some: StockOrderWhereInput
   stocks_none: StockOrderWhereInput
@@ -1902,4 +1891,5 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+  apikey: String
 }

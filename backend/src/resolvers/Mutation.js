@@ -4,6 +4,7 @@ const { randomBytes} = require('crypto');
 const { promisify } = require('util');
 const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require('../utils');
+const axios = require('axios');
 
 const Mutations = {
    async createStock(parent, args, ctx, info) {
@@ -210,6 +211,70 @@ const Mutations = {
                 id: args.userId
             }
         }, info);
+
+    },
+    async updateStocks(parent, args, ctx, info) {
+        /*
+        //check if logged in 
+        if (!ctx.request.userId) {
+            throw new Error('You must be logged in');
+         };
+        //query current user
+         const currentUser = await ctx.db.query.user({
+             where: {
+                 id: ctx.request.userId
+             }
+         }, info);
+        //check if they have permissions to do thia
+        hasPermission(currentUser, ['ADMIN', 'STOCKUPDATE']);  */
+        //find grouping
+        //console.log(args.grouping);
+
+        //get the grouping
+        let stocks = await ctx.db.query.stocks({ 
+            where: {
+                grouping: args.grouping
+            }
+        }, info);
+
+        //make a url-ready search
+        let output = "";
+        for (var i = 0; i < stocks.length; i++) {
+            output += stocks[i].symbol;
+            if (i !== stocks.length-1) {
+                output+=",";
+            } 
+        }
+
+        console.log(output);
+
+        //update each one
+        await axios.get(`https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&apikey=${process.env.API_KEY}&symbols=${output}`)
+            .then(response => {
+                for (let i of stocks) {
+                    stocks[i].price = response.data['Stock Quotes'][i]['2. price'];
+                };
+                //console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            }
+            );
+
+        console.log(stocks);
+
+        //save to database
+        for (var i = 0; i < stocks.length; i++) {
+            const updatedStock = await ctx.db.mutation.updateStock({
+                where: {
+                    id: stocks[i].id
+                },
+                data: {
+                    price: stocks[i].price
+                }
+            });
+        }
+        return stocks;
 
     }
     

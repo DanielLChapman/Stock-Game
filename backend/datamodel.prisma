@@ -12,8 +12,6 @@ type Stock {
   id: ID! @id
   name: String! @unique
   symbol: String! @unique
-  opening: Float
-  price: Float
   grouping: Float!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -28,6 +26,7 @@ type User {
   resetTokenExpiry: Float
   permissions: [Permission] @scalarList(strategy: RELATION)
   money: Float @default(value: 10000000)
+  apikey: String @unique
   stocks: [StockOrder]
 }
 
