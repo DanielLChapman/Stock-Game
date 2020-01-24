@@ -20,7 +20,7 @@ class Signup extends Component {
     name: '',
     email: '',
     password: '',
-    apikey: '',
+    apikey: 'apikey',
   };
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -37,8 +37,12 @@ class Signup extends Component {
             method="post"
             onSubmit={async e => {
               e.preventDefault();
+              if (this.state.apikey === '') {
+                  alert('Please dont leave apikey empty, enter apikey if you dont currently have one');
+                  return ;
+              }
               await signup();
-              this.setState({ name: '', email: '', password: '', apikey: '' });
+              this.setState({ name: '', email: '', password: '', apikey: 'apikey' });
             }}
           >
             <fieldset disabled={loading} aria-busy={loading}>

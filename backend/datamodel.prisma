@@ -26,7 +26,7 @@ type User {
   resetTokenExpiry: Float
   permissions: [Permission] @scalarList(strategy: RELATION)
   money: Float @default(value: 10000000)
-  apikey: String @unique
+  apikey: String
   stocks: [StockOrder]
 }
 

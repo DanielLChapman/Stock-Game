@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/daniel-chapman-a5ce0d/stock-game/dev
-# timestamp: Fri Jan 24 2020 17:18:49 GMT-0500 (Eastern Standard Time)
+# timestamp: Fri Jan 24 2020 18:19:00 GMT-0500 (Eastern Standard Time)
 
 type AggregateRandomProfile {
   count: Int!
@@ -1891,5 +1891,4 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
-  apikey: String
 }
