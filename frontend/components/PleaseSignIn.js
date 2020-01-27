@@ -1,6 +1,7 @@
 import { Query } from 'react-apollo';
 import { CURRENT_USER_QUERY } from './User';
 import Signin  from './Signin';
+import Router from 'next/router';
 
 const PleaseSignIn = (props) => (
     <Query query={CURRENT_USER_QUERY}>
@@ -12,6 +13,7 @@ const PleaseSignIn = (props) => (
                     <Signin />
                 </div>
             }
+        
             return props.children;
         }}
     </Query>

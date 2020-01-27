@@ -17,8 +17,6 @@ const ALL_RANDOM_PROFILES_QUERY = gql`
                     name
                     id
                     symbol
-                    opening
-                    price
                 }
             }
         }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import Form from './styles/Form';
 import Error from './ErrorMessage';
@@ -16,6 +16,7 @@ const SIGNUP_MUTATION = gql`
 `;
 
 class Signup extends Component {
+    
   state = {
     name: '',
     email: '',
@@ -25,6 +26,9 @@ class Signup extends Component {
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
+
+  
+
   render() {
     return (
       <Mutation
@@ -32,7 +36,8 @@ class Signup extends Component {
         variables={this.state}
         refetchQueries={[{query: CURRENT_USER_QUERY}]}
       >
-        {(signup, { error, loading }) => (
+        {(signup, {error ,loading}) => (
+        
           <Form
             method="post"
             onSubmit={async e => {
@@ -94,6 +99,7 @@ class Signup extends Component {
           </Form>
         )}
       </Mutation>
+
     );
   }
 }
