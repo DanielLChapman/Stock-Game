@@ -186,6 +186,47 @@ const Mutations = {
         //return user
         return updatedUser;
     },
+    async updateInformation(parent, args, ctx, info) {
+
+        args.email = args.email.toLowerCase();
+        
+        //if (!ctx.request.userId) {
+         //   throw new Error('You must be logged in');
+       // };
+
+        let currentUser = await ctx.db.query.user({
+            where: {
+                //id: ctx.request.userId
+                id: "ck5ss44p9tvmp0b00xxrk6gct"
+            }
+        });
+
+        //verify data
+        console.log(args.name.length);
+        if (args.email.length === 0) {throw new Error('Email Cannot Be Empty')};
+        if (args.name.length === 0) {throw new Error('Name Cannot Be Empty')};
+        const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        let result = re.test(args.email);
+        if (!result) {
+            throw new Error('Email Is Invalid');
+        }
+
+        const updatedUser = await ctx.db.mutation.updateUser({
+            where: {
+                email: currentUser.email
+            },
+            data: {
+                email: args.email,
+                name: args.email
+            }
+        });
+
+
+        return updatedUser;
+
+
+
+    },
     async updatePermissions(parent, args, ctx, info) {
 
         //check if logged in 
@@ -214,7 +255,7 @@ const Mutations = {
 
     },
     async updateStocks(parent, args, ctx, info) {
-        /*
+        
         //check if logged in 
         if (!ctx.request.userId) {
             throw new Error('You must be logged in');
@@ -226,10 +267,8 @@ const Mutations = {
              }
          }, info);
         //check if they have permissions to do thia
-        hasPermission(currentUser, ['ADMIN', 'STOCKUPDATE']);  */
+        hasPermission(currentUser, ['ADMIN', 'STOCKUPDATE']);  
         //find grouping
-        //console.log(args.grouping);
-
         //get the grouping
         let stocks = await ctx.db.query.stocks({ 
             where: {
@@ -260,7 +299,7 @@ const Mutations = {
                 console.log(error);
             }
             );
-            
+
         //save to database
         for (var i = 0; i < stocks.length; i++) {
             const updatedStock = await ctx.db.mutation.updateStock({
