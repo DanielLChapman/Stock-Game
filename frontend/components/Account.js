@@ -1,6 +1,7 @@
 
 import User from './User';
-import ChangeInformation from './account-page/ChangeInformation'
+import ChangeInformation from './account-page/ChangeInformation';
+import ChangePassword from './account-page/ChangePassword'
 
 const Account = () => (
             <User>
@@ -10,6 +11,7 @@ const Account = () => (
                         {me && (
                             <>
                                 <ChangeInformation user={me} />
+                                <ChangePassword />
                             </>
                         )}
                         

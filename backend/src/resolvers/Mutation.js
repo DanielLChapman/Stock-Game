@@ -226,6 +226,53 @@ const Mutations = {
 
 
     },
+    async updatePassword(parent, args, ctx, info) {
+        if (!ctx.request.userId) {
+            throw new Error('You must be logged in');
+        };
+ 
+        let currentUser = await ctx.db.query.user({
+            where: {
+                id: ctx.request.userId
+            }
+        });
+
+        //compare old password to current password
+        let valid = await bcrypt.compare(args.oldPassword, currentUser.password);
+
+        if (!valid ) {
+            throw new Error('Invalid Old Password')
+        };
+
+        //make sure confirm and new password match
+        valid = args.password === args.confirmPassword;
+
+        if (!valid) {
+            throw new Error('Password and Password Confirm Do Not Match');
+        }
+
+
+        //hash new password
+        const password = await bcrypt.hash(args.password, 10);
+        //save the new password to the user and remove old reset token fields
+        const updatedUser = await ctx.db.mutation.updateUser({
+            where: {
+                email: currentUser.email
+            },
+            data: {
+                password,
+            }
+        });
+        //generate JWT
+        const token = jwt.sign({userId: updatedUser.id}, process.env.APP_SECRET);
+        //set JWT
+        ctx.response.cookie('token', token, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24 * 365 //1 year
+        });
+        //return user
+        return updatedUser;
+    },
     async updatePermissions(parent, args, ctx, info) {
 
         //check if logged in 
