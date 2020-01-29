@@ -1,10 +1,11 @@
 import React from 'react';
 import PleaseSignIn from '../components/PleaseSignIn';
+import Account from '../components/Account';
 
 const AccountPage = props => (
     <div>
         <PleaseSignIn>
-            <p>Accounts</p>
+            <Account />
         </PleaseSignIn>
         
     </div>

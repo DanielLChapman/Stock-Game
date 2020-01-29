@@ -190,19 +190,17 @@ const Mutations = {
 
         args.email = args.email.toLowerCase();
         
-        //if (!ctx.request.userId) {
-         //   throw new Error('You must be logged in');
-       // };
+        if (!ctx.request.userId) {
+           throw new Error('You must be logged in');
+        };
 
         let currentUser = await ctx.db.query.user({
             where: {
-                //id: ctx.request.userId
-                id: "ck5ss44p9tvmp0b00xxrk6gct"
+                id: ctx.request.userId
             }
         });
 
         //verify data
-        console.log(args.name.length);
         if (args.email.length === 0) {throw new Error('Email Cannot Be Empty')};
         if (args.name.length === 0) {throw new Error('Name Cannot Be Empty')};
         const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -217,10 +215,11 @@ const Mutations = {
             },
             data: {
                 email: args.email,
-                name: args.email
+                name: args.name
             }
         });
 
+        
 
         return updatedUser;
 
