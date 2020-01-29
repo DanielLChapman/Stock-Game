@@ -300,6 +300,42 @@ const Mutations = {
         }, info);
 
     },
+    async updateAPIKey(parent, args, ctx, info) {
+         //check if logged in 
+         if (!ctx.request.userId) {
+            throw new Error('You must be logged in');
+         };
+        //query current user
+         const currentUser = await ctx.db.query.user({
+             where: {
+                 id: ctx.request.userId
+             }
+         }, info);
+
+        //get api key from args
+        const apikey = args.apikey;
+        //attempt a test to see if its correct
+        if(/[^a-zA-Z0-9]/.test(apikey)) {
+            throw new Error('Invalid API Key');
+        }
+
+        let res = await axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=${apikey}`);
+
+        if(!res.data['Meta Data']) {
+            throw new Error('Invalid API Key');
+        }
+        //update user
+
+        //return user
+        return ctx.db.mutation.updateUser({
+            data: {
+                apikey
+            },
+            where: {
+                id: ctx.request.userId
+            }
+        }, info);
+    },
     async updateStocks(parent, args, ctx, info) {
         
         //check if logged in 
@@ -330,8 +366,6 @@ const Mutations = {
                 output+=",";
             } 
         }
-
-        console.log(output);
 
         //update each one
         await axios.get(`https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&apikey=${process.env.API_KEY}&symbols=${output}`)

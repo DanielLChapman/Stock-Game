@@ -12,6 +12,7 @@ type Mutation {
     requestReset(email: String!): SuccessMessage
     resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
     updateInformation(email: String!, name: String): User!
+    updateAPIKey(apikey: String!): User!
     updatePassword(oldPassword: String!, password: String!, confirmPassword: String!): User!
     updatePermissions(permissions: [Permission], userId: ID!): User
     updateStocks(grouping: Float): [Stock]!

@@ -85,6 +85,8 @@ class Signup extends Component {
               </label>
               <label htmlFor="apikey">
                 Alpha Vantage API Key (It's free. Can be updated later, not required now)
+                <br />
+                (Grab one <a href="https://www.alphavantage.co/support/#api-key">here!</a>)
                 <input
                   type="text"
                   name="apikey"

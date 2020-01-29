@@ -42,7 +42,7 @@ class Reset extends Component {
                 }}
             >
                 <fieldset disabled={loading} aria-busy={loading}>
-                <h2>Reset Your Password</h2>
+                <h2>Update Your Password</h2>
                 <Error error={error} />
                 {called && !error && !loading &&(
                     <p data-test="graphql-error">
@@ -79,7 +79,7 @@ class Reset extends Component {
                     onChange={this.saveToState}
                     />
                 </label>
-                <button type="submit">Reset!</button>
+                <button type="submit">Update!</button>
                 </fieldset>
             </Form>
             )}
