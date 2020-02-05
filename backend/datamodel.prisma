@@ -39,7 +39,7 @@ type RandomProfile {
 
 type StockOrder {
   id: ID! @id
-  stock: Stock!
+  symbol: String!
   user: User!
   quantity: Float! @default(value: 1)
   purchasedAt: Float!
@@ -47,7 +47,7 @@ type StockOrder {
 
 type RandomProfileStockOrder {
   id: ID! @id
-  stock: Stock!
+  symbol: String!
   profile: RandomProfile!
   quantity: Float! @default(value: 1)
   purchasedAt: Float!

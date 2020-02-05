@@ -25,6 +25,7 @@ type Query {
     randomProfiles: [RandomProfile]!
     me: User
     users: [User]!
+    stockSearch(symbol: String): Stock!
 }
 
 type User {
@@ -34,4 +35,12 @@ type User {
     permissions: [Permission] 
     money: Float 
     stocks: [StockOrder]
+}
+
+type Stock {
+  name: String!
+  symbol: String!
+  message: String
+  price: Float
+  opening: Float
 }

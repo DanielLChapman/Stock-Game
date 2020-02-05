@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/daniel-chapman-a5ce0d/stock-game/dev
-# timestamp: Fri Jan 24 2020 18:19:00 GMT-0500 (Eastern Standard Time)
+# timestamp: Wed Feb 05 2020 17:09:39 GMT-0500 (Eastern Standard Time)
 
 type AggregateRandomProfile {
   count: Int!
@@ -35,36 +35,36 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
+  createStock(data: StockCreateInput!): Stock!
   createUser(data: UserCreateInput!): User!
   createRandomProfile(data: RandomProfileCreateInput!): RandomProfile!
   createStockOrder(data: StockOrderCreateInput!): StockOrder!
   createRandomProfileStockOrder(data: RandomProfileStockOrderCreateInput!): RandomProfileStockOrder!
-  createStock(data: StockCreateInput!): Stock!
+  updateStock(data: StockUpdateInput!, where: StockWhereUniqueInput!): Stock
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateRandomProfile(data: RandomProfileUpdateInput!, where: RandomProfileWhereUniqueInput!): RandomProfile
   updateStockOrder(data: StockOrderUpdateInput!, where: StockOrderWhereUniqueInput!): StockOrder
   updateRandomProfileStockOrder(data: RandomProfileStockOrderUpdateInput!, where: RandomProfileStockOrderWhereUniqueInput!): RandomProfileStockOrder
-  updateStock(data: StockUpdateInput!, where: StockWhereUniqueInput!): Stock
+  deleteStock(where: StockWhereUniqueInput!): Stock
   deleteUser(where: UserWhereUniqueInput!): User
   deleteRandomProfile(where: RandomProfileWhereUniqueInput!): RandomProfile
   deleteStockOrder(where: StockOrderWhereUniqueInput!): StockOrder
   deleteRandomProfileStockOrder(where: RandomProfileStockOrderWhereUniqueInput!): RandomProfileStockOrder
-  deleteStock(where: StockWhereUniqueInput!): Stock
+  upsertStock(where: StockWhereUniqueInput!, create: StockCreateInput!, update: StockUpdateInput!): Stock!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertRandomProfile(where: RandomProfileWhereUniqueInput!, create: RandomProfileCreateInput!, update: RandomProfileUpdateInput!): RandomProfile!
   upsertStockOrder(where: StockOrderWhereUniqueInput!, create: StockOrderCreateInput!, update: StockOrderUpdateInput!): StockOrder!
   upsertRandomProfileStockOrder(where: RandomProfileStockOrderWhereUniqueInput!, create: RandomProfileStockOrderCreateInput!, update: RandomProfileStockOrderUpdateInput!): RandomProfileStockOrder!
-  upsertStock(where: StockWhereUniqueInput!, create: StockCreateInput!, update: StockUpdateInput!): Stock!
+  updateManyStocks(data: StockUpdateManyMutationInput!, where: StockWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyRandomProfiles(data: RandomProfileUpdateManyMutationInput!, where: RandomProfileWhereInput): BatchPayload!
   updateManyStockOrders(data: StockOrderUpdateManyMutationInput!, where: StockOrderWhereInput): BatchPayload!
   updateManyRandomProfileStockOrders(data: RandomProfileStockOrderUpdateManyMutationInput!, where: RandomProfileStockOrderWhereInput): BatchPayload!
-  updateManyStocks(data: StockUpdateManyMutationInput!, where: StockWhereInput): BatchPayload!
+  deleteManyStocks(where: StockWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyRandomProfiles(where: RandomProfileWhereInput): BatchPayload!
   deleteManyStockOrders(where: StockOrderWhereInput): BatchPayload!
   deleteManyRandomProfileStockOrders(where: RandomProfileStockOrderWhereInput): BatchPayload!
-  deleteManyStocks(where: StockWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -105,21 +105,21 @@ enum Permission {
 }
 
 type Query {
+  stocks(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   randomProfiles(where: RandomProfileWhereInput, orderBy: RandomProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RandomProfile]!
   stockOrders(where: StockOrderWhereInput, orderBy: StockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockOrder]!
   randomProfileStockOrders(where: RandomProfileStockOrderWhereInput, orderBy: RandomProfileStockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RandomProfileStockOrder]!
-  stocks(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stock]!
+  stock(where: StockWhereUniqueInput!): Stock
   user(where: UserWhereUniqueInput!): User
   randomProfile(where: RandomProfileWhereUniqueInput!): RandomProfile
   stockOrder(where: StockOrderWhereUniqueInput!): StockOrder
   randomProfileStockOrder(where: RandomProfileStockOrderWhereUniqueInput!): RandomProfileStockOrder
-  stock(where: StockWhereUniqueInput!): Stock
+  stocksConnection(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   randomProfilesConnection(where: RandomProfileWhereInput, orderBy: RandomProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RandomProfileConnection!
   stockOrdersConnection(where: StockOrderWhereInput, orderBy: StockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockOrderConnection!
   randomProfileStockOrdersConnection(where: RandomProfileStockOrderWhereInput, orderBy: RandomProfileStockOrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RandomProfileStockOrderConnection!
-  stocksConnection(where: StockWhereInput, orderBy: StockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -189,7 +189,7 @@ type RandomProfilePreviousValues {
 
 type RandomProfileStockOrder implements Node {
   id: ID!
-  stock: Stock!
+  symbol: String!
   profile: RandomProfile!
   quantity: Float!
   purchasedAt: Float!
@@ -207,9 +207,9 @@ type RandomProfileStockOrderConnection {
 
 input RandomProfileStockOrderCreateInput {
   id: ID
+  symbol: String!
   quantity: Float
   purchasedAt: Float!
-  stock: StockCreateOneInput!
   profile: RandomProfileCreateOneWithoutStocksInput!
 }
 
@@ -220,9 +220,9 @@ input RandomProfileStockOrderCreateManyWithoutProfileInput {
 
 input RandomProfileStockOrderCreateWithoutProfileInput {
   id: ID
+  symbol: String!
   quantity: Float
   purchasedAt: Float!
-  stock: StockCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -237,6 +237,8 @@ type RandomProfileStockOrderEdge {
 enum RandomProfileStockOrderOrderByInput {
   id_ASC
   id_DESC
+  symbol_ASC
+  symbol_DESC
   quantity_ASC
   quantity_DESC
   purchasedAt_ASC
@@ -245,6 +247,7 @@ enum RandomProfileStockOrderOrderByInput {
 
 type RandomProfileStockOrderPreviousValues {
   id: ID!
+  symbol: String!
   quantity: Float!
   purchasedAt: Float!
 }
@@ -298,6 +301,46 @@ input RandomProfileStockOrderScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  symbol: String
+
+  """All values that are not equal to given value."""
+  symbol_not: String
+
+  """All values that are contained in given list."""
+  symbol_in: [String!]
+
+  """All values that are not contained in given list."""
+  symbol_not_in: [String!]
+
+  """All values less than the given value."""
+  symbol_lt: String
+
+  """All values less than or equal the given value."""
+  symbol_lte: String
+
+  """All values greater than the given value."""
+  symbol_gt: String
+
+  """All values greater than or equal the given value."""
+  symbol_gte: String
+
+  """All values containing the given string."""
+  symbol_contains: String
+
+  """All values not containing the given string."""
+  symbol_not_contains: String
+
+  """All values starting with the given string."""
+  symbol_starts_with: String
+
+  """All values not starting with the given string."""
+  symbol_not_starts_with: String
+
+  """All values ending with the given string."""
+  symbol_ends_with: String
+
+  """All values not ending with the given string."""
+  symbol_not_ends_with: String
   quantity: Float
 
   """All values that are not equal to given value."""
@@ -382,18 +425,20 @@ input RandomProfileStockOrderSubscriptionWhereInput {
 }
 
 input RandomProfileStockOrderUpdateInput {
+  symbol: String
   quantity: Float
   purchasedAt: Float
-  stock: StockUpdateOneRequiredInput
   profile: RandomProfileUpdateOneRequiredWithoutStocksInput
 }
 
 input RandomProfileStockOrderUpdateManyDataInput {
+  symbol: String
   quantity: Float
   purchasedAt: Float
 }
 
 input RandomProfileStockOrderUpdateManyMutationInput {
+  symbol: String
   quantity: Float
   purchasedAt: Float
 }
@@ -416,9 +461,9 @@ input RandomProfileStockOrderUpdateManyWithWhereNestedInput {
 }
 
 input RandomProfileStockOrderUpdateWithoutProfileDataInput {
+  symbol: String
   quantity: Float
   purchasedAt: Float
-  stock: StockUpdateOneRequiredInput
 }
 
 input RandomProfileStockOrderUpdateWithWhereUniqueWithoutProfileInput {
@@ -481,6 +526,46 @@ input RandomProfileStockOrderWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  symbol: String
+
+  """All values that are not equal to given value."""
+  symbol_not: String
+
+  """All values that are contained in given list."""
+  symbol_in: [String!]
+
+  """All values that are not contained in given list."""
+  symbol_not_in: [String!]
+
+  """All values less than the given value."""
+  symbol_lt: String
+
+  """All values less than or equal the given value."""
+  symbol_lte: String
+
+  """All values greater than the given value."""
+  symbol_gt: String
+
+  """All values greater than or equal the given value."""
+  symbol_gte: String
+
+  """All values containing the given string."""
+  symbol_contains: String
+
+  """All values not containing the given string."""
+  symbol_not_contains: String
+
+  """All values starting with the given string."""
+  symbol_starts_with: String
+
+  """All values not starting with the given string."""
+  symbol_not_starts_with: String
+
+  """All values ending with the given string."""
+  symbol_ends_with: String
+
+  """All values not ending with the given string."""
+  symbol_not_ends_with: String
   quantity: Float
 
   """All values that are not equal to given value."""
@@ -525,7 +610,6 @@ input RandomProfileStockOrderWhereInput {
 
   """All values greater than or equal the given value."""
   purchasedAt_gte: Float
-  stock: StockWhereInput
   profile: RandomProfileWhereInput
 }
 
@@ -744,11 +828,6 @@ input StockCreateInput {
   grouping: Float!
 }
 
-input StockCreateOneInput {
-  create: StockCreateInput
-  connect: StockWhereUniqueInput
-}
-
 """An edge in a connection."""
 type StockEdge {
   """The item at the end of the edge."""
@@ -760,7 +839,7 @@ type StockEdge {
 
 type StockOrder implements Node {
   id: ID!
-  stock: Stock!
+  symbol: String!
   user: User!
   quantity: Float!
   purchasedAt: Float!
@@ -793,9 +872,9 @@ type StockOrderConnection {
 
 input StockOrderCreateInput {
   id: ID
+  symbol: String!
   quantity: Float
   purchasedAt: Float!
-  stock: StockCreateOneInput!
   user: UserCreateOneWithoutStocksInput!
 }
 
@@ -806,9 +885,9 @@ input StockOrderCreateManyWithoutUserInput {
 
 input StockOrderCreateWithoutUserInput {
   id: ID
+  symbol: String!
   quantity: Float
   purchasedAt: Float!
-  stock: StockCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -823,6 +902,8 @@ type StockOrderEdge {
 enum StockOrderOrderByInput {
   id_ASC
   id_DESC
+  symbol_ASC
+  symbol_DESC
   quantity_ASC
   quantity_DESC
   purchasedAt_ASC
@@ -831,6 +912,7 @@ enum StockOrderOrderByInput {
 
 type StockOrderPreviousValues {
   id: ID!
+  symbol: String!
   quantity: Float!
   purchasedAt: Float!
 }
@@ -884,6 +966,46 @@ input StockOrderScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  symbol: String
+
+  """All values that are not equal to given value."""
+  symbol_not: String
+
+  """All values that are contained in given list."""
+  symbol_in: [String!]
+
+  """All values that are not contained in given list."""
+  symbol_not_in: [String!]
+
+  """All values less than the given value."""
+  symbol_lt: String
+
+  """All values less than or equal the given value."""
+  symbol_lte: String
+
+  """All values greater than the given value."""
+  symbol_gt: String
+
+  """All values greater than or equal the given value."""
+  symbol_gte: String
+
+  """All values containing the given string."""
+  symbol_contains: String
+
+  """All values not containing the given string."""
+  symbol_not_contains: String
+
+  """All values starting with the given string."""
+  symbol_starts_with: String
+
+  """All values not starting with the given string."""
+  symbol_not_starts_with: String
+
+  """All values ending with the given string."""
+  symbol_ends_with: String
+
+  """All values not ending with the given string."""
+  symbol_not_ends_with: String
   quantity: Float
 
   """All values that are not equal to given value."""
@@ -968,18 +1090,20 @@ input StockOrderSubscriptionWhereInput {
 }
 
 input StockOrderUpdateInput {
+  symbol: String
   quantity: Float
   purchasedAt: Float
-  stock: StockUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutStocksInput
 }
 
 input StockOrderUpdateManyDataInput {
+  symbol: String
   quantity: Float
   purchasedAt: Float
 }
 
 input StockOrderUpdateManyMutationInput {
+  symbol: String
   quantity: Float
   purchasedAt: Float
 }
@@ -1002,9 +1126,9 @@ input StockOrderUpdateManyWithWhereNestedInput {
 }
 
 input StockOrderUpdateWithoutUserDataInput {
+  symbol: String
   quantity: Float
   purchasedAt: Float
-  stock: StockUpdateOneRequiredInput
 }
 
 input StockOrderUpdateWithWhereUniqueWithoutUserInput {
@@ -1067,6 +1191,46 @@ input StockOrderWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  symbol: String
+
+  """All values that are not equal to given value."""
+  symbol_not: String
+
+  """All values that are contained in given list."""
+  symbol_in: [String!]
+
+  """All values that are not contained in given list."""
+  symbol_not_in: [String!]
+
+  """All values less than the given value."""
+  symbol_lt: String
+
+  """All values less than or equal the given value."""
+  symbol_lte: String
+
+  """All values greater than the given value."""
+  symbol_gt: String
+
+  """All values greater than or equal the given value."""
+  symbol_gte: String
+
+  """All values containing the given string."""
+  symbol_contains: String
+
+  """All values not containing the given string."""
+  symbol_not_contains: String
+
+  """All values starting with the given string."""
+  symbol_starts_with: String
+
+  """All values not starting with the given string."""
+  symbol_not_starts_with: String
+
+  """All values ending with the given string."""
+  symbol_ends_with: String
+
+  """All values not ending with the given string."""
+  symbol_not_ends_with: String
   quantity: Float
 
   """All values that are not equal to given value."""
@@ -1111,7 +1275,6 @@ input StockOrderWhereInput {
 
   """All values greater than or equal the given value."""
   purchasedAt_gte: Float
-  stock: StockWhereInput
   user: UserWhereInput
 }
 
@@ -1165,12 +1328,6 @@ input StockSubscriptionWhereInput {
   node: StockWhereInput
 }
 
-input StockUpdateDataInput {
-  name: String
-  symbol: String
-  grouping: Float
-}
-
 input StockUpdateInput {
   name: String
   symbol: String
@@ -1181,18 +1338,6 @@ input StockUpdateManyMutationInput {
   name: String
   symbol: String
   grouping: Float
-}
-
-input StockUpdateOneRequiredInput {
-  create: StockCreateInput
-  connect: StockWhereUniqueInput
-  update: StockUpdateDataInput
-  upsert: StockUpsertNestedInput
-}
-
-input StockUpsertNestedInput {
-  update: StockUpdateDataInput!
-  create: StockCreateInput!
 }
 
 input StockWhereInput {
@@ -1399,11 +1544,11 @@ input StockWhereUniqueInput {
 }
 
 type Subscription {
+  stock(where: StockSubscriptionWhereInput): StockSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   randomProfile(where: RandomProfileSubscriptionWhereInput): RandomProfileSubscriptionPayload
   stockOrder(where: StockOrderSubscriptionWhereInput): StockOrderSubscriptionPayload
   randomProfileStockOrder(where: RandomProfileStockOrderSubscriptionWhereInput): RandomProfileStockOrderSubscriptionPayload
-  stock(where: StockSubscriptionWhereInput): StockSubscriptionPayload
 }
 
 type User implements Node {
