@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Form from './styles/Form';
 
 class SearchBox extends Component {
     constructor(props) {
@@ -17,18 +18,18 @@ class SearchBox extends Component {
     
     handleSubmit(event) {
         event.preventDefault();
-        this.props.getStockName(this.state.value);
+        this.props.getSymbol(this.state.value);
     }
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit}>
                 <label>
                 Stock (Name or Symbol):
                 <input type="text" value={this.state.value} onChange={this.handleChange} />
                 </label>
                 <input type="submit" value="Submit" />
-            </form>
+            </Form>
         );
     }
 }

@@ -48,7 +48,7 @@ const Query = {
       }
       // else use the free one
       else {
-         apiKey = process.env.FREEAPIKEY
+         apiKey = process.env.FREEAPIKEY;
       }
       // verify there are no special characters in symbol
       if(/[^a-zA-Z0-9]/.test(args.symbol)) {

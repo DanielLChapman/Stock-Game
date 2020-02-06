@@ -13,11 +13,7 @@ const ALL_RANDOM_PROFILES_QUERY = gql`
                 id
                 quantity
                 purchasedAt
-                stock {
-                    name
-                    id
-                    symbol
-                }
+                symbol
             }
         }
     }
