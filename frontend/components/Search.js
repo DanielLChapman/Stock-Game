@@ -18,11 +18,14 @@ const SEARCH_STOCK_QUERY = gql`
 
 function Search() {
     const [symbol, setSymbol] = useState('');
+    const [hasSearched, setSearch] = useState('false');
 
     const getSymbol = ((symbol) => {
 
         setSymbol(symbol);
+        setSearch(true);
     })
+
 
     return (
         <SearchStyles data-test="search">
@@ -32,7 +35,9 @@ function Search() {
             </div>
             <div className="results">
                 {symbol}
-                <SearchResults symbol={symbol}/>
+                {hasSearched && symbol.length > 0 && 
+                    <SearchResults symbol={symbol}/>
+                }
             </div>
         </div>
 
