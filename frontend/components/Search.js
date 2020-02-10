@@ -34,7 +34,6 @@ function Search() {
                 <SearchBox getSymbol={getSymbol} />
             </div>
             <div className="results">
-                {symbol}
                 {hasSearched && symbol.length > 0 && 
                     <SearchResults symbol={symbol}/>
                 }
